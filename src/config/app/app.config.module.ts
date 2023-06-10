@@ -10,7 +10,7 @@ import configuration from './app.configuration';
       load: [configuration],
       validationSchema: Joi.object({
         PORT: Joi.number().required(),
-        MODE: Joi.string().valid('DEV', 'PROD').required(),
+        NODE_ENV: Joi.string().valid('DEV', 'PREPROD', 'PROD').required(),
       }),
     }),
   ],
