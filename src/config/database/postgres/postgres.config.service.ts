@@ -6,7 +6,7 @@ import {
 } from '@nestjs/typeorm/dist/interfaces/typeorm-options.interface';
 
 @Injectable()
-export default class DatabaseConfigService implements TypeOrmOptionsFactory {
+export default class PostgresConfigService implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
 
   get HOST(): string {
@@ -30,13 +30,10 @@ export default class DatabaseConfigService implements TypeOrmOptionsFactory {
   }
 
   get SYNC(): boolean {
-    return this.configService.get<string>('DB.SYNC') === 'true';
+    return true;
   }
 
-  createTypeOrmOptions(
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    connectionName?: string,
-  ): Promise<TypeOrmModuleOptions> | TypeOrmModuleOptions {
+  createTypeOrmOptions(): Promise<TypeOrmModuleOptions> | TypeOrmModuleOptions {
     return {
       type: 'postgres',
       host: this.HOST,
@@ -46,15 +43,7 @@ export default class DatabaseConfigService implements TypeOrmOptionsFactory {
       database: this.NAME,
       synchronize: this.SYNC,
       entities: ['dist/**/*.entity{.ts,.js}'],
-      // charset: 'utf8mb4_unicode_ci',
-      migrations: ['dist/db/migrations/*{.ts,.js}'],
-      migrationsTableName: 'migrations',
-      migrationsRun: false,
-      // multipleStatements allows you to run multiply raw sql query in one query runner
-      // multipleStatements: true,
-      // cli: {
-      //   migrationsDir: 'src/db/migrations',
-      // },
+      migrations: ['db/migrations/*{.ts,.js}'],
     };
   }
 }

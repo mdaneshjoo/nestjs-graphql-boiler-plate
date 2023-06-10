@@ -7,14 +7,12 @@ import { ConfigModule } from '@nestjs/config';
 import {
   AppConfigModule,
   CustomConfigModule,
-  DatabaseConfigModule,
-  DatabaseConfigService,
   GraphqlConfigService,
+  PostgresConfigModule,
+  PostgresConfigService,
   ThrottlerConfigService,
 } from '@config';
 import AuthModule from './app/auth/auth.module';
-import AppController from './app.controller';
-import AppService from './app.service';
 
 @Module({
   imports: [
@@ -29,8 +27,8 @@ import AppService from './app.service';
       useClass: ThrottlerConfigService,
     }),
     TypeOrmModule.forRootAsync({
-      imports: [DatabaseConfigModule],
-      useClass: DatabaseConfigService,
+      imports: [PostgresConfigModule],
+      useClass: PostgresConfigService,
     }),
     // endregion
 
@@ -38,8 +36,5 @@ import AppService from './app.service';
 
     AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
 })
-export default class AppModule {
-}
+export default class AppModule {}
