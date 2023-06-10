@@ -14,7 +14,7 @@ export default class GraphqlConfigService
     | Promise<Omit<ApolloDriverConfig, 'driver'>>
     | Omit<ApolloDriverConfig, 'driver'> {
     return {
-      playground: this.appConfigService.MODE === 'DEV',
+      playground: this.appConfigService.NODE_ENV === 'DEV',
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
     };

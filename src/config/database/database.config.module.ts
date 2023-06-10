@@ -9,12 +9,11 @@ import configuration from './database.configuration';
     ConfigModule.forRoot({
       load: [configuration],
       validationSchema: Joi.object({
-        DB_HOST: Joi.string().required(),
-        DB_PORT: Joi.number().required(),
-        DB_USERNAME: Joi.string().required(),
-        DB_NAME: Joi.string().required(),
-        DB_PASSWORD: Joi.string().required(),
-        DB_SYNC_MODELS: Joi.boolean().default(false),
+        POSTGRES_HOST: Joi.string().required(),
+        POSTGRES_PORT: Joi.number().required(),
+        POSTGRES_USER: Joi.string().required(),
+        POSTGRES_DATABASE: Joi.string().required(),
+        POSTGRES_PASSWORD: Joi.string().required(),
       }),
     }),
   ],

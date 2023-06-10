@@ -10,7 +10,7 @@ export default class AppConfigService {
     return this.configService.get<number>('App.PORT');
   }
 
-  get MODE(): Mode {
-    return this.configService.get<Mode>('App.MODE');
+  get NODE_ENV(): Mode {
+    return this.configService.get<Mode>('App.NODE_ENV');
   }
 }
