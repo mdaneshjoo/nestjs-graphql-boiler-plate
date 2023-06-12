@@ -44,7 +44,8 @@ module.exports = {
     'consistent-this': 'off',
     'class-methods-use-this': 'off', // https://eslint.org/docs/latest/rules/class-methods-use-this
     'no-unused-vars': 'off', // I turned this off temporary due to issue for private constructor,
-    "no-shadow": "off",
-    "@typescript-eslint/no-shadow": "error"
+    'no-shadow': 'off',
+    '@typescript-eslint/no-shadow': 'error',
+    'operator-linebreak': 'off',
   },
 };
