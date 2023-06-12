@@ -8,10 +8,11 @@ import {
   AppConfigModule,
   CustomConfigModule,
   GraphqlConfigService,
-  PostgresConfigModule,
   PostgresConfigService,
   ThrottlerConfigService,
 } from '@config';
+import ShareModule from './app/share/share.module';
+import UserModule from './app/user/user.module';
 import AuthModule from './app/auth/auth.module';
 
 @Module({
@@ -27,7 +28,7 @@ import AuthModule from './app/auth/auth.module';
       useClass: ThrottlerConfigService,
     }),
     TypeOrmModule.forRootAsync({
-      imports: [PostgresConfigModule],
+      imports: [ConfigModule],
       useClass: PostgresConfigService,
     }),
     // endregion
@@ -35,6 +36,8 @@ import AuthModule from './app/auth/auth.module';
     ...CustomConfigModule,
 
     AuthModule,
+    UserModule,
+    ShareModule,
   ],
 })
 export default class AppModule {}

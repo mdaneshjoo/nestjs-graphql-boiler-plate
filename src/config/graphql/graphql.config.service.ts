@@ -17,6 +17,8 @@ export default class GraphqlConfigService
       playground: this.appConfigService.NODE_ENV === 'DEV',
       autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
       sortSchema: true,
+      includeStacktraceInErrorResponses:
+        this.appConfigService.NODE_ENV === 'DEV',
     };
   }
 }

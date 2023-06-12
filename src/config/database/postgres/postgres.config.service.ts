@@ -44,6 +44,7 @@ export default class PostgresConfigService implements TypeOrmOptionsFactory {
       synchronize: this.SYNC,
       entities: ['dist/**/*.entity{.ts,.js}'],
       migrations: ['db/migrations/*{.ts,.js}'],
+      autoLoadEntities: true,
     };
   }
 }
