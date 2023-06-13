@@ -1,0 +1,117 @@
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
+import { In } from 'typeorm';
+import RolesRepository from './repositories/roles.repository';
+import PermissionsRepository from './repositories/permissions.repository';
+import Roles from './entities/roles.entity';
+import UserPermissions from './entities/permissions.entity';
+import { FindOrCreateResult } from '../share/interface';
+import { getPermissionsDescription } from './permissions.enum';
+import { RoleFilterParam, UpdateRoleParam } from './interfaces/role.interface';
+import { PermissionFilterParams } from './interfaces/permissions.interface';
+
+@Injectable()
+export default class RolesService {
+  constructor(
+    private readonly roleRepository: RolesRepository,
+    private readonly permissionRepository: PermissionsRepository,
+  ) {}
+
+  /**
+   * @desc if role not exist created it else return exist role
+   * */
+  async findOrCreateRole(role: Roles): Promise<Roles> {
+    const { result: createdRole } = await this.roleRepository.findOrCreate(
+      { name: role.name },
+      role,
+    );
+    return createdRole;
+  }
+
+  /**
+   * @desc find  roles by its name without relation
+   * */
+  async findByName(names: string[]): Promise<Roles[]> {
+    return this.roleRepository.find({
+      where: { name: In(names) },
+    });
+  }
+
+  async createPermissions(
+    permission: UserPermissions,
+  ): Promise<FindOrCreateResult<UserPermissions>> {
+    return this.permissionRepository.findOrCreate(
+      {
+        permissionName: permission.permissionName,
+      },
+      permission,
+    );
+  }
+
+  /**
+   * @desc if permission not exist will create it else return exist permission
+   * */
+
+  async createRoleAndPermissions(roleData: Roles) {
+    const permissions = await Promise.all(
+      roleData.permissions.map(async (perm) => {
+        const { result } = await this.createPermissions({
+          permissionName: perm.permissionName,
+          description: getPermissionsDescription(perm.description),
+        });
+        return result;
+      }),
+    );
+    const { result: role } = await this.roleRepository.findOrCreate(
+      { name: roleData.name },
+      roleData,
+    );
+
+    role.permissions = permissions;
+    return this.roleRepository.save(role);
+  }
+
+  async getAllRoles(roleFilterData: RoleFilterParam): Promise<Roles[]> {
+    return this.roleRepository.find({
+      take: roleFilterData.take || 10,
+      skip: roleFilterData.skip || 0,
+      relations: { permissions: true },
+    });
+  }
+
+  async getAllPermissions(
+    permissionFilterData: PermissionFilterParams,
+  ): Promise<UserPermissions[]> {
+    return this.permissionRepository.find({
+      take: permissionFilterData.take || 10,
+      skip: permissionFilterData.skip || 0,
+    });
+  }
+
+  async updateRolePermissions(updateRole: UpdateRoleParam): Promise<Roles> {
+    const role = await this.roleRepository.findOne({
+      where: { id: updateRole.id },
+      relations: { permissions: true },
+    });
+    if (!role) throw new NotFoundException('role not exist');
+    const foundPermissions = await this.permissionRepository.find({
+      where: { id: In(updateRole.permissions.map((_perm) => _perm.id)) },
+    });
+    if (!foundPermissions.length) throw new Error("permission doesn't exist");
+    role.permissions = foundPermissions;
+    return this.roleRepository.save(role);
+  }
+
+  async delete(roleId: number): Promise<number> {
+    const { affected } = await this.roleRepository
+      .createQueryBuilder()
+      .softDelete()
+      .where('id=:id', { id: roleId })
+      .execute();
+    if (!affected) throw new BadRequestException('Unable to delete this role');
+    return roleId;
+  }
+}

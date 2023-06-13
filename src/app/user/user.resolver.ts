@@ -1,32 +1,53 @@
-import { Args, Int, Mutation, Query, Resolver } from '@nestjs/graphql';
+import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import UserService from './user.service';
 import CreateUserInput from './dto/create-user.input';
 import User from './entities/user.entity';
+import { PermissionsEnum } from '../roles/permissions.enum';
+import { RequirePermissions } from '../share/decorators/permission-api.decorator';
+import RolesRepository from '../roles/repositories/roles.repository';
+import CurrentUser from '../share/decorators/current-user.decorator';
+import { JwtPayload } from '../auth/auth.types';
 
 @Resolver(() => User)
 export default class UserResolver {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService,
+    private readonly roleRepository: RolesRepository,
+  ) {}
 
+  @RequirePermissions(PermissionsEnum.CREATE_USER)
   @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput) {
+  createUser(
+    @CurrentUser() user: JwtPayload,
+    @Args('createUserInput') createUserInput: CreateUserInput,
+  ) {
     return this.userService.create({
       email: createUserInput.email,
       password: createUserInput.password,
+      role: this.roleRepository.create(createUserInput.rolesId),
     });
   }
 
-  @Query(() => [User], { name: 'user' })
-  findAll() {
-    return this.userService.findAll();
+  @Query(() => User)
+  async me(@CurrentUser() currentUser: JwtPayload): Promise<User> {
+    return this.userService.findOneById(currentUser.id);
   }
 
-  @Query(() => User, { name: 'user' })
-  findOne(@Args('email') email: string): Promise<User> {
-    return this.userService.findOne(email);
+  uploadAvatar() {
+    return 'upload';
   }
 
-  @Mutation(() => User)
-  removeUser(@Args('id', { type: () => Int }) id: number) {
-    return this.userService.remove(id);
+  updateProfile() {
+    return 'upload';
+  }
+
+  // TODO remove token from redis
+  delete() {
+    return 'upload';
+  }
+
+  // TODO expire user token
+  changeUserRole() {
+    return 'upload';
   }
 }

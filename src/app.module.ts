@@ -14,6 +14,8 @@ import {
 import ShareModule from './app/share/share.module';
 import UserModule from './app/user/user.module';
 import AuthModule from './app/auth/auth.module';
+import RolesModule from './app/roles/roles.module';
+import PrivilegesModule from './app/commands/privileges.module';
 
 @Module({
   imports: [
@@ -38,6 +40,10 @@ import AuthModule from './app/auth/auth.module';
     AuthModule,
     UserModule,
     ShareModule,
+    RolesModule,
+    PrivilegesModule,
   ],
 })
-export default class AppModule {}
+// we can export default because of PrivilegesModule (cli file read this class)
+// eslint-disable-next-line import/prefer-default-export
+export class AppModule {}

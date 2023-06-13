@@ -1,7 +1,7 @@
 import { NestFactory } from '@nestjs/core';
 import helmet from 'helmet';
 import { ValidationPipe } from '@nestjs/common';
-import AppModule from './app.module';
+import { AppModule } from './app.module';
 import { AppConfigService } from './config';
 
 async function bootstrap() {
@@ -29,7 +29,13 @@ async function bootstrap() {
     }),
   );
   const appConfig = app.get<AppConfigService>(AppConfigService);
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+      transform: true,
+    }),
+  );
   await app.listen(appConfig.PORT);
 }
 

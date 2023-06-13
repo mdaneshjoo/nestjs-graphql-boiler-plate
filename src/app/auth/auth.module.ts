@@ -12,6 +12,7 @@ import LocalStrategy from './strategies/local-strategy';
 import JwtStrategy from './strategies/jwt-strategy';
 import UserModule from '../user/user.module';
 import JwtAuthGuard from './guards/gql-jwt-auth.guard';
+import PermissionsGuard from './guards/permission.guard';
 
 @Module({
   imports: [
@@ -32,6 +33,10 @@ import JwtAuthGuard from './guards/gql-jwt-auth.guard';
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: PermissionsGuard,
     },
   ],
   exports: [AuthService],

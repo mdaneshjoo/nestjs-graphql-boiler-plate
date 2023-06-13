@@ -47,5 +47,10 @@ module.exports = {
     'no-shadow': 'off',
     '@typescript-eslint/no-shadow': 'error',
     'operator-linebreak': 'off',
+    'no-plusplus': 'off',
+    'guard-for-in': 'off',
+    'no-await-in-loop': 'off',
+    'function-paren-newline': 'off',
+    'no-restricted-syntax': 'off',
   },
 };
