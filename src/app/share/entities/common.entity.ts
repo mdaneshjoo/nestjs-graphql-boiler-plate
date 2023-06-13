@@ -4,10 +4,11 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { Field, Int } from '@nestjs/graphql';
+import { Field, ID, ObjectType } from '@nestjs/graphql';
 
+@ObjectType()
 export default class CommonEntity {
-  @Field(() => Int, { description: 'User id' })
+  @Field(() => ID, { description: 'User id' })
   @PrimaryGeneratedColumn()
   id?: number;
 
@@ -19,7 +20,7 @@ export default class CommonEntity {
   @UpdateDateColumn()
   updatedAt?: Date;
 
-  @Field({ description: 'user password' })
+  @Field({ nullable: true })
   @DeleteDateColumn({ nullable: true })
   deletedAt?: Date;
 }

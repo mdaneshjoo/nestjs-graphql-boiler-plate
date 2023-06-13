@@ -2,16 +2,66 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+input CreateRoleInput {
+  """role description"""
+  description: String
+
+  """role name"""
+  name: String!
+
+  """permission ids to assign to the role"""
+  permissionIds: [IdDto!]
+}
+
 input CreateUserInput {
   """user email address"""
   email: String!
 
   """user password"""
   password: String!
+
+  """user password"""
+  rolesId: [IdDto!]!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Delete {
+  """deleted item id"""
+  id: ID!
+}
+
+input GetAllPermissionsInput {
+  """default is 0 ( start from field 0 )"""
+  after: Int = 0
+
+  """default is 10 ( first 10 field )"""
+  first: Int = 10
+}
+
+input GetAllRolesInput {
+  """default is 0 ( start from field 0 )"""
+  after: Int = 0
+
+  """default is 10 ( first 10 field )"""
+  first: Int = 10
+}
+
+input GetRoleInput {
+  """role id"""
+  id: ID!
+}
+
+input IdDto {
+  """user password"""
+  id: ID!
 }
 
 type Login {
-  """user password"""
+  """logged-in user jwt access token"""
   access_token: String!
 }
 
@@ -23,20 +73,114 @@ input LoginInput {
   password: String!
 }
 
+type Logout {
+  """if true jwt expired"""
+  isLoggedOut: Boolean!
+}
+
 type Mutation {
+  createRole(createRoleInput: CreateRoleInput!): Roles!
   createUser(createUserInput: CreateUserInput!): User!
+  deleteRole(id: ID!): Delete!
   login(loginInput: LoginInput!): Login!
-  removeUser(id: Int!): User!
+
+  """not ready yet"""
+  logout: Logout!
+
+  """not ready yet"""
+  updateRole(updateRole: UpdateRoleInput!): Roles!
+  updateRolePermissions(updateRolePermissionInput: UpdateRolePermissionInput!): Roles!
+}
+
+input PermissionsInputType {
+  """user email"""
+  description: String!
+
+  """user email"""
+  permissionName: String!
+}
+
+type PermissionsType {
+  """user password"""
+  createdAt: DateTime!
+  deletedAt: DateTime
+
+  """user email"""
+  description: String!
+
+  """User id"""
+  id: ID!
+
+  """user email"""
+  permissionName: String!
+
+  """user password"""
+  updatedAt: DateTime!
 }
 
 type Query {
-  user(email: String!): User!
+  getAllPermissions(getAllPermissionsInput: GetAllPermissionsInput!): [PermissionsType!]!
+  getAllRoles(getAllRolesInput: GetAllRolesInput!): [Roles!]!
+
+  """not ready yet"""
+  getRole(getRoleInput: GetRoleInput!): Roles!
+  me: User!
+}
+
+type Roles {
+  """user password"""
+  createdAt: DateTime!
+  deletedAt: DateTime
+
+  """role description"""
+  description: String
+
+  """User id"""
+  id: ID!
+
+  """role name"""
+  name: String!
+
+  """role permissions"""
+  permissions: [PermissionsType!]
+
+  """user password"""
+  updatedAt: DateTime!
+}
+
+input UpdateRoleInput {
+  """role description"""
+  description: String
+
+  """role name"""
+  name: String!
+}
+
+input UpdateRolePermissionInput {
+  """role id to update"""
+  id: ID!
+
+  """permission ids to assign to the role"""
+  permissionIds: [IdDto!]!
 }
 
 type User {
+  """user password"""
+  createdAt: DateTime!
+  deletedAt: DateTime
+
   """user email"""
   email: String!
 
+  """User id"""
+  id: ID!
+
+  """user firstName and lastName"""
+  name: String
+
+  """user email"""
+  role: [Roles!]!
+
   """user password"""
-  password: String!
+  updatedAt: DateTime!
 }

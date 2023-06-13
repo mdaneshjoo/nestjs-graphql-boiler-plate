@@ -38,7 +38,7 @@ export default class JwtAuthGuard implements CanActivate {
     try {
       const token = this.extractTokenFromHeader(this.getRequest(context));
       if (!token) throw new Error('please provide valid token');
-
+      // TODO validate from redis
       const decodedPayload: JwtPayload = this.jwtService.verify(token, {
         secret: this.jwtConfigService.SECRET,
       });

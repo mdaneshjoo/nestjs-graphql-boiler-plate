@@ -1,4 +1,1 @@
-// eslint-disable-next-line import/prefer-default-export
-export enum Auth {
-  message = 'sds',
-}
+/* eslint-disable import/prefer-default-export */

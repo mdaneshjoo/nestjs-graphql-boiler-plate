@@ -9,6 +9,11 @@ echo "Wait for POSTGRES=${POSTGRES}, REDIS=${REDIS}"
 wait-for-it ${POSTGRES}
 wait-for-it ${REDIS}
 
+node cli create:permissions
+
+node cli create:roles
+
+node cli create:superuser --email=mohammad.daneshjoo92@gmail.com --password=123456789
 
 if [ "$NODE_ENV" == "DEV" ]
 then

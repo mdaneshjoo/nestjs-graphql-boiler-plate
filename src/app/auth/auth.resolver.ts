@@ -7,6 +7,7 @@ import LocalAuthGuard from './guards/gql-local-auth.guard';
 import Login from './entities/login.entity';
 import CurrentUser from '../share/decorators/current-user.decorator';
 import { Public } from '../share/decorators/public-endpoint.decorator';
+import Logout from './entities/logout.entity';
 
 @Resolver(() => User)
 export default class AuthResolver {
@@ -21,5 +22,10 @@ export default class AuthResolver {
     @Args('loginInput') loginInput: LoginInput,
   ): Promise<Login> {
     return this.authService.login(user);
+  }
+
+  @Mutation(() => Logout, { description: 'not ready yet' })
+  logout(@CurrentUser() user: User): Logout {
+    return { isLoggedOut: false };
   }
 }
