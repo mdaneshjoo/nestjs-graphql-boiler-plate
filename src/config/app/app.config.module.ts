@@ -11,6 +11,7 @@ import configuration from './app.configuration';
       validationSchema: Joi.object({
         PORT: Joi.number().required(),
         NODE_ENV: Joi.string().valid('DEV', 'PREPROD', 'PROD').required(),
+        TOKEN_EXPIRE: Joi.number().required(),
       }),
     }),
   ],

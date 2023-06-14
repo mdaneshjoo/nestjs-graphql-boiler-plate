@@ -1,6 +1,7 @@
 import {
   CanActivate,
   ExecutionContext,
+  Inject,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
@@ -9,6 +10,8 @@ import { Reflector } from '@nestjs/core';
 import { Request } from 'express';
 import { JwtService } from '@nestjs/jwt';
 import { JwtConfigService } from '@config';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import { IS_PUBLIC_KEY } from '../../share/decorators/public-endpoint.decorator';
 import { JwtPayload } from '../auth.types';
 
@@ -18,6 +21,8 @@ export default class JwtAuthGuard implements CanActivate {
     private readonly reflector: Reflector,
     private readonly jwtService: JwtService,
     private readonly jwtConfigService: JwtConfigService,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   getRequest(context: ExecutionContext) {
@@ -38,11 +43,18 @@ export default class JwtAuthGuard implements CanActivate {
     try {
       const token = this.extractTokenFromHeader(this.getRequest(context));
       if (!token) throw new Error('please provide valid token');
-      // TODO validate from redis
       const decodedPayload: JwtPayload = this.jwtService.verify(token, {
         secret: this.jwtConfigService.SECRET,
       });
       if (!decodedPayload) throw new Error('please provide valid token');
+
+      const fetchedToken = await this.cacheManager.get<string>(
+        decodedPayload.id.toString(),
+      );
+      if (!fetchedToken) throw new Error('please provide valid token');
+      if (fetchedToken !== token) {
+        throw new Error('your token has been expired');
+      }
       this.getRequest(context).user = decodedPayload;
       return true;
     } catch (e) {

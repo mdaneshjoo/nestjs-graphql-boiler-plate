@@ -84,20 +84,12 @@ type Mutation {
   deleteRole(id: ID!): Delete!
   login(loginInput: LoginInput!): Login!
 
-  """not ready yet"""
+  """logout user"""
   logout: Logout!
 
   """not ready yet"""
   updateRole(updateRole: UpdateRoleInput!): Roles!
   updateRolePermissions(updateRolePermissionInput: UpdateRolePermissionInput!): Roles!
-}
-
-input PermissionsInputType {
-  """user email"""
-  description: String!
-
-  """user email"""
-  permissionName: String!
 }
 
 type PermissionsType {
@@ -113,6 +105,9 @@ type PermissionsType {
 
   """user email"""
   permissionName: String!
+
+  """permission roles"""
+  roles: [Roles!]
 
   """user password"""
   updatedAt: DateTime!
@@ -146,6 +141,9 @@ type Roles {
 
   """user password"""
   updatedAt: DateTime!
+
+  """role  permissions"""
+  users: [User!]
 }
 
 input UpdateRoleInput {
@@ -178,8 +176,8 @@ type User {
   """user firstName and lastName"""
   name: String
 
-  """user email"""
-  role: [Roles!]!
+  """user roles"""
+  roles: [Roles!]
 
   """user password"""
   updatedAt: DateTime!

@@ -1,9 +1,12 @@
 import {
   BadRequestException,
+  Inject,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
 import { In } from 'typeorm';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
 import RolesRepository from './repositories/roles.repository';
 import PermissionsRepository from './repositories/permissions.repository';
 import Roles from './entities/roles.entity';
@@ -18,6 +21,8 @@ export default class RolesService {
   constructor(
     private readonly roleRepository: RolesRepository,
     private readonly permissionRepository: PermissionsRepository,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   /**
@@ -94,15 +99,19 @@ export default class RolesService {
   async updateRolePermissions(updateRole: UpdateRoleParam): Promise<Roles> {
     const role = await this.roleRepository.findOne({
       where: { id: updateRole.id },
-      relations: { permissions: true },
+      relations: { permissions: true, users: true },
     });
+
     if (!role) throw new NotFoundException('role not exist');
     const foundPermissions = await this.permissionRepository.find({
       where: { id: In(updateRole.permissions.map((_perm) => _perm.id)) },
     });
     if (!foundPermissions.length) throw new Error("permission doesn't exist");
     role.permissions = foundPermissions;
-    return this.roleRepository.save(role);
+    const savedRoles = await this.roleRepository.save(role);
+    const roleUsersIds = role.users.map((user) => user.id.toString());
+    this.cacheManager.store.mdel(...roleUsersIds);
+    return savedRoles;
   }
 
   async delete(roleId: number): Promise<number> {

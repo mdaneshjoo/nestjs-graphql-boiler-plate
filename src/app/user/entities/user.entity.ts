@@ -26,10 +26,13 @@ export default class User extends CommonEntity {
   @Column({ default: false })
   needChangePassword?: boolean;
 
-  @Field(() => [Roles], { description: 'user email' })
-  @ManyToMany(() => Roles)
+  @Field(() => [Roles], {
+    description: 'user roles',
+    nullable: true,
+  })
+  @ManyToMany(() => Roles, (roles) => roles.users)
   @JoinTable()
-  role: Roles[];
+  roles: Roles[];
 
   @BeforeInsert()
   private async hashPassword(): Promise<void> {

@@ -12,7 +12,6 @@ import configuration from './jwt.configuration';
       load: [configuration],
       validationSchema: Joi.object({
         JWT_SECRET: Joi.string().required(),
-        JWT_EXPIRE: Joi.string().required(),
       }),
     }),
   ],

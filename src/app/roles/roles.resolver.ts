@@ -66,7 +66,6 @@ export default class RolesResolver {
     );
   }
 
-  // TODO remove all tokens related to updated role
   @RequirePermissions(PermissionsEnum.UPDATE_ROLE_PERMISSIONS)
   @Mutation(() => Roles)
   async updateRolePermissions(

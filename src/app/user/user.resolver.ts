@@ -24,7 +24,7 @@ export default class UserResolver {
     return this.userService.create({
       email: createUserInput.email,
       password: createUserInput.password,
-      role: this.roleRepository.create(createUserInput.rolesId),
+      roles: this.roleRepository.create(createUserInput.rolesId),
     });
   }
 
