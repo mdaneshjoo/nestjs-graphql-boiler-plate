@@ -24,8 +24,9 @@ export default class AuthResolver {
     return this.authService.login(user);
   }
 
-  @Mutation(() => Logout, { description: 'not ready yet' })
-  logout(@CurrentUser() user: User): Logout {
-    return { isLoggedOut: false };
+  @Mutation(() => Logout, { description: 'logout user' })
+  async logout(@CurrentUser() user: User): Promise<Logout> {
+    await this.authService.logout(user.id);
+    return { isLoggedOut: true };
   }
 }

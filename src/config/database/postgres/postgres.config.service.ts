@@ -10,23 +10,23 @@ export default class PostgresConfigService implements TypeOrmOptionsFactory {
   constructor(private configService: ConfigService) {}
 
   get HOST(): string {
-    return this.configService.get<string>('DB.HOST');
+    return this.configService.get<string>('PG.HOST');
   }
 
   get PORT(): number {
-    return +this.configService.get<string>('DB.PORT');
+    return +this.configService.get<string>('PG.PORT');
   }
 
   get USERNAME(): string {
-    return this.configService.get<string>('DB.USERNAME');
+    return this.configService.get<string>('PG.USERNAME');
   }
 
   get PASSWORD(): string {
-    return this.configService.get<string>('DB.PASSWORD');
+    return this.configService.get<string>('PG.PASSWORD');
   }
 
   get NAME(): string {
-    return this.configService.get<string>('DB.NAME');
+    return this.configService.get<string>('PG.NAME');
   }
 
   get SYNC(): boolean {

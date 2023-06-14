@@ -9,6 +9,7 @@ import AppConfigService from './app/app.config.service';
 import PostgresConfigModule from './database/postgres/postgres.config.module';
 import JwtConfigModule from './app/jwt/jwt.config.module';
 import JwtConfigService from './app/jwt/jwt.config.service';
+import RedisConfigModule from './database/redis/redis.config.module';
 
 /**
  * @description all config module should import in this array
@@ -19,6 +20,7 @@ export const CustomConfigModule = [
   GraphqlConfigModule,
   ThrottlerConfigModule,
   JwtConfigModule,
+  RedisConfigModule,
 ];
 
 // region Config Module Group

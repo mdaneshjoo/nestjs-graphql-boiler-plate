@@ -11,11 +11,13 @@ import {
   PostgresConfigService,
   ThrottlerConfigService,
 } from '@config';
+import { CacheModule } from '@nestjs/cache-manager';
 import ShareModule from './app/share/share.module';
 import UserModule from './app/user/user.module';
 import AuthModule from './app/auth/auth.module';
 import RolesModule from './app/roles/roles.module';
 import PrivilegesModule from './app/commands/privileges.module';
+import RedisConfigService from './config/database/redis/redis.config.service';
 
 @Module({
   imports: [
@@ -32,6 +34,11 @@ import PrivilegesModule from './app/commands/privileges.module';
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
       useClass: PostgresConfigService,
+    }),
+    CacheModule.registerAsync({
+      imports: [ConfigModule],
+      isGlobal: true,
+      useClass: RedisConfigService,
     }),
     // endregion
 

@@ -24,6 +24,8 @@ services:
       - sale-system-backend
     volumes:
       - redis:/data
+    ports:
+      - "${REDIS_EXPOSE_PORT}:${REDIS_PORT}"
   main:
     build:
       context: .

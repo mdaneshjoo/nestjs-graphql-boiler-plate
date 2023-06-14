@@ -22,12 +22,12 @@ export default class UserService {
     });
     if (existedUser) throw new BadRequestException('user exist');
     const role = await this.roleRepository.find({
-      where: { id: In(userData.role.map((_role) => _role.id)) },
+      where: { id: In(userData.roles.map((_role) => _role.id)) },
       relations: { permissions: true },
     });
     if (!role.length) throw new NotFoundException('roles not exist');
     const user = this.userRepository.create(userData);
-    user.role = role;
+    user.roles = role;
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { password, ...userPasswordExcluded } =
       await this.userRepository.save(user);
@@ -37,14 +37,14 @@ export default class UserService {
   async getUserByEmail(email: string): Promise<User> {
     return this.userRepository.findOne({
       where: { email },
-      relations: { role: { permissions: true } },
+      relations: { roles: { permissions: true } },
     });
   }
 
   async findOneById(id: number): Promise<User> {
     return this.userRepository.findOne({
       where: { id },
-      relations: { role: { permissions: true } },
+      relations: { roles: { permissions: true } },
     });
   }
 }

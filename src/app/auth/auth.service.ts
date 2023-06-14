@@ -1,6 +1,9 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
+import { CACHE_MANAGER } from '@nestjs/cache-manager';
+import { Cache } from 'cache-manager';
+import { AppConfigService } from '@config';
 import UserService from '../user/user.service';
 import User from '../user/entities/user.entity';
 import JwtConfigService from '../../config/app/jwt/jwt.config.service';
@@ -12,6 +15,9 @@ export default class AuthService {
     private readonly userService: UserService,
     private readonly jwtService: JwtService,
     private readonly jwtConfigService: JwtConfigService,
+    private readonly appConfigService: AppConfigService,
+    @Inject(CACHE_MANAGER)
+    private readonly cacheManager: Cache,
   ) {}
 
   async validate(email: string, password: string): Promise<User | null> {
@@ -23,7 +29,7 @@ export default class AuthService {
   }
 
   async login(user: User): Promise<{ access_token: string }> {
-    const role = user.role.map((roles) => {
+    const role = user.roles.map((roles) => {
       const permissions = roles.permissions.map(({ permissionName, id }) => ({
         id,
         permissionName,
@@ -31,11 +37,16 @@ export default class AuthService {
       return { id: roles.id, roleName: roles.name, permissions };
     }) as PayloadRole;
     const payload: JwtPayload = { id: user.id, email: user.email, role };
-    // TODO set token to redis
+    const accessToken = await this.jwtService.signAsync(payload);
+    await this.cacheManager.set(
+      user.id.toString(),
+      accessToken,
+      this.appConfigService.NODE_ENV === 'DEV'
+        ? 0
+        : this.appConfigService.TOKEN_EXPIRE,
+    );
     return {
-      access_token: await this.jwtService.signAsync(payload, {
-        expiresIn: this.jwtConfigService.EXPIRE,
-      }),
+      access_token: accessToken,
     };
   }
 
@@ -49,5 +60,9 @@ export default class AuthService {
       });
     }
     return [...permissions];
+  }
+
+  async logout(id: number): Promise<void> {
+    await this.cacheManager.del(id.toString());
   }
 }

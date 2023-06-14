@@ -34,7 +34,7 @@ export default class PrivilegesCommands {
         email,
         name: 'super user',
         password,
-        role: [this.rolesRepository.create(role)],
+        roles: [this.rolesRepository.create(role)],
       });
       _cli.success('SuperUser is created!');
       return true;

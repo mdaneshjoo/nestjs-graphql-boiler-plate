@@ -17,18 +17,9 @@ export default class JwtConfigService implements JwtOptionsFactory {
     return this.configService.get('JWT.SECRET');
   }
 
-  get EXPIRE(): string {
-    return this.configService.get('JWT.EXPIRE');
-  }
-
-  get IGNORE_EXPIRE(): boolean {
-    return this.appConfigService.NODE_ENV === 'DEV';
-  }
-
   createJwtOptions(): Promise<JwtModuleOptions> | JwtModuleOptions {
     return {
       secret: this.SECRET,
-      signOptions: { expiresIn: this.EXPIRE },
     };
   }
 }

@@ -12,9 +12,8 @@ export default class JwtStrategy extends PassportStrategy(Strategy) {
   ) {
     super({
       jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken,
-      ignoreExpiration: jwtConfigService.IGNORE_EXPIRE,
       secretOrKey: jwtConfigService.SECRET,
-      passReqToCallback: false,
+      passReqToCallback: true,
     });
   }
 }
