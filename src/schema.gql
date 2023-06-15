@@ -2,6 +2,11 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type ChangePassword {
+  """if true password changed"""
+  isPasswordChanged: Boolean!
+}
+
 input CreateRoleInput {
   """role description"""
   description: String
@@ -79,6 +84,8 @@ type Logout {
 }
 
 type Mutation {
+  """change users password by admin"""
+  changePasswordByAdmin(userChangePasswordInput: UserChangePasswordInput!): ChangePassword!
   createRole(createRoleInput: CreateRoleInput!): Roles!
   createUser(createUserInput: CreateUserInput!): User!
   deleteRole(id: ID!): Delete!
@@ -181,4 +188,12 @@ type User {
 
   """user password"""
   updatedAt: DateTime!
+}
+
+input UserChangePasswordInput {
+  """user new password"""
+  password: String!
+
+  """user id to change password"""
+  userId: ID!
 }

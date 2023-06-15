@@ -12,7 +12,7 @@ import GetAllRolesInput from './dto/get-all-roles.input';
 import GetAllPermissionsInput from './dto/get-all-permissions.Input';
 import Delete from '../share/dto/delete.entity';
 import CurrentUser from '../share/decorators/current-user.decorator';
-import { JwtPayload } from '../auth/auth.types';
+import { JwtPayload } from '../auth/interfaces/auth.types';
 import { RequirePermissions } from '../share/decorators/permission-api.decorator';
 import { PermissionsEnum } from './permissions.enum';
 

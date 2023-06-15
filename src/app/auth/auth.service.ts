@@ -7,7 +7,7 @@ import { AppConfigService } from '@config';
 import UserService from '../user/user.service';
 import User from '../user/entities/user.entity';
 import JwtConfigService from '../../config/app/jwt/jwt.config.service';
-import { JwtPayload, PayloadRole } from './auth.types';
+import { JwtPayload, PayloadRole } from './interfaces/auth.types';
 
 @Injectable()
 export default class AuthService {
