@@ -10,11 +10,11 @@ export default class ThrottlerConfigService implements ThrottlerOptionsFactory {
   constructor(private configService: ConfigService) {}
 
   get RATE_LIMITER_TTL(): number {
-    return +this.configService.get<number>('App.RATE_LIMITER_TTL');
+    return +this.configService.get<string>('RL.TTL');
   }
 
   get RATE_LIMITER_LIMIT(): number {
-    return +this.configService.get<number>('App.RATE_LIMITER_LIMIT');
+    return +this.configService.get<string>('RL.LIMIT');
   }
 
   createThrottlerOptions():

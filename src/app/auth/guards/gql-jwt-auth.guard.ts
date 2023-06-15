@@ -13,7 +13,7 @@ import { JwtConfigService } from '@config';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
 import { IS_PUBLIC_KEY } from '../../share/decorators/public-endpoint.decorator';
-import { JwtPayload } from '../auth.types';
+import { JwtPayload } from '../interfaces/auth.types';
 
 @Injectable()
 export default class JwtAuthGuard implements CanActivate {

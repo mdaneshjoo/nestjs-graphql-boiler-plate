@@ -4,7 +4,7 @@ import { GqlExecutionContext } from '@nestjs/graphql';
 import { PermissionsEnum } from '../../roles/permissions.enum';
 import AuthService from '../auth.service';
 import { PERMISSION_KEY } from '../../share/decorators/permission-api.decorator';
-import { JwtPayload } from '../auth.types';
+import { JwtPayload } from '../interfaces/auth.types';
 
 @Injectable()
 export default class PermissionsGuard implements CanActivate {

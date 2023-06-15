@@ -10,6 +10,7 @@ export enum PermissionsEnum {
   UPDATE_ROLE_PERMISSIONS = 'update-role-permissions',
   UPDATE_ROLE = 'update-role',
   DELETE_ROLE = 'delete-role',
+  CHANGE_USERS_PASSWORD = 'change-users-password',
 }
 
 export enum PermissionsDescriptionEnum {

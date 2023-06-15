@@ -6,7 +6,7 @@ import { PermissionsEnum } from '../roles/permissions.enum';
 import { RequirePermissions } from '../share/decorators/permission-api.decorator';
 import RolesRepository from '../roles/repositories/roles.repository';
 import CurrentUser from '../share/decorators/current-user.decorator';
-import { JwtPayload } from '../auth/auth.types';
+import { JwtPayload } from '../auth/interfaces/auth.types';
 
 @Resolver(() => User)
 export default class UserResolver {
