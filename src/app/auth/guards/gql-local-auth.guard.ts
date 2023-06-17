@@ -4,17 +4,14 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { AuthGuard } from '@nestjs/passport';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { validate } from 'class-validator';
 import LoginInput from '../dto/login.Input';
 import AuthService from '../auth.service';
 
 @Injectable()
-export default class LocalAuthGuard extends AuthGuard('local') {
-  constructor(private readonly authService: AuthService) {
-    super();
-  }
+export default class LocalAuthGuard {
+  constructor(private readonly authService: AuthService) {}
 
   getRequest(context: ExecutionContext) {
     const ctx = GqlExecutionContext.create(context);
