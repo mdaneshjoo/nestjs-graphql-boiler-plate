@@ -8,6 +8,7 @@ import User from './entities/user.entity';
 import UserRepository from './repositories/user.repository';
 import { UserInterface } from './interfaces/user.interface';
 import RolesRepository from '../roles/repositories/roles.repository';
+import Roles from '../roles/entities/roles.entity';
 
 @Injectable()
 export default class UserService {
@@ -46,5 +47,13 @@ export default class UserService {
       where: { id },
       relations: { roles: { permissions: true } },
     });
+  }
+
+  async updateRole(id: number, roles: Roles[]): Promise<User> {
+    const user = await this.userRepository.findOne({ where: { id } });
+    if (!user) throw new NotFoundException('user not exist');
+    user.roles = roles;
+    await this.userRepository.save(user);
+    return user;
   }
 }

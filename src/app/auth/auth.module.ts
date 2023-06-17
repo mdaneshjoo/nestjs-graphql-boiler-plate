@@ -8,8 +8,6 @@ import AuthService from './auth.service';
 import AuthResolver from './auth.resolver';
 import JwtConfigModule from '../../config/app/jwt/jwt.config.module';
 import JwtConfigService from '../../config/app/jwt/jwt.config.service';
-import LocalStrategy from './strategies/local-strategy';
-import JwtStrategy from './strategies/jwt-strategy';
 import UserModule from '../user/user.module';
 import JwtAuthGuard from './guards/gql-jwt-auth.guard';
 import PermissionsGuard from './guards/permission.guard';
@@ -28,8 +26,6 @@ import PermissionsGuard from './guards/permission.guard';
   providers: [
     AuthResolver,
     AuthService,
-    LocalStrategy,
-    JwtStrategy,
     {
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
