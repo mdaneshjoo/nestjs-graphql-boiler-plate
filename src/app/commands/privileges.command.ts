@@ -25,17 +25,26 @@ export default class PrivilegesCommands {
     try {
       const { email, password } = this.getEmail(_cli);
       const existUser = await this.userService.getUserByEmail(email);
-      if (existUser) throw new Error('User Exist');
       const role = await this.rolesService.createRoleAndPermissions(
         ConstRoles.SuperAdmin,
       );
-      _cli.success(`Role ${role.name} is created!`);
-      await this.userService.create({
-        email,
-        name: 'super user',
-        password,
-        roles: [this.rolesRepository.create(role)],
-      });
+      if (existUser) {
+        await this.userService.updateRole(existUser.id, [
+          this.rolesRepository.create(role),
+        ]);
+        _cli.success(
+          `User ${existUser.name} roles' has been updated to ${role.name}`,
+        );
+      } else {
+        _cli.success(`Role ${role.name} is created!`);
+        await this.userService.create({
+          email,
+          name: 'super user',
+          password,
+          roles: [this.rolesRepository.create(role)],
+        });
+      }
+
       _cli.success('SuperUser is created!');
       return true;
     } catch (e) {
