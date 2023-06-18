@@ -22,7 +22,7 @@ module.exports = {
     browser: true,
     jest: true,
   },
-  ignorePatterns: ['.eslintrc.js', 'i18n.generated.ts'],
+  ignorePatterns: ['.eslintrc.js', 'i18n.generated.ts','schema.gql'],
   rules: {
     //<editor-fold desc="handles by prettier no need in eslint(if turn it off it will make conflict wit prettier)">
     indent: 'off',
