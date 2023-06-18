@@ -2,7 +2,7 @@ import { NotFoundException } from '@nestjs/common';
 import { I18nPath } from '../../../../generated/i18n.generated';
 
 export default class NotFoundI18nException extends NotFoundException {
-  constructor(key: I18nPath, private readonly _args?: unknown) {
+  constructor(key: I18nPath | string, private readonly _args?: unknown) {
     super(key);
   }
 
