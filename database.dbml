@@ -14,7 +14,7 @@ Table users {
   email varchar [not null , unique]
   password varchar [not null]
   name varchar
-  roles integer [ref:<> roles.id]
+  // roles integer [ref:<> roles.id]
 }
 
 Table roles {
@@ -24,7 +24,7 @@ Table roles {
   deletedAt timestamp
   name varchar [not null , unique]
   description varchar
-  permissions integer [ref:<> permissions.id]
+  // permissions integer [ref:<> permissions.id]
 }
 
 Table permissions {
@@ -34,5 +34,14 @@ Table permissions {
   deletedAt timestamp
   name varchar [ unique]
   description varchar
-  roles integer
+}
+
+Table roles_permissions_permissions{
+  rolesId integer [ref: > roles.id]
+  permissionId integer [ref: > permissions.id]
+}
+
+Table users_roles_roles{
+  rolesId integer [ref: > roles.id]
+  usersId integer [ref: > users.id]
 }
