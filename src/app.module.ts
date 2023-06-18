@@ -44,6 +44,9 @@ import RedisConfigService from './config/database/redis/redis.config.service';
     }),
     I18nModule.forRoot({
       fallbackLanguage: 'en',
+      fallbacks: {
+        tr: 'tr',
+      },
       loaderOptions: {
         path: path.join(__dirname, '/i18n/'),
         watch: true,
