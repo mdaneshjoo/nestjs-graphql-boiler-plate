@@ -59,8 +59,7 @@ export default class PrivilegesCommands {
       const permissionKeys = Object.keys(PermissionsEnum);
       for (const permission of permissionKeys) {
         const { created } = await this.rolesService.createPermissions({
-          permissionName:
-            PermissionsEnum[permission as keyof typeof PermissionsEnum],
+          name: PermissionsEnum[permission as keyof typeof PermissionsEnum],
         });
         _cli.info(
           created
@@ -91,18 +90,14 @@ export default class PrivilegesCommands {
         const role = ConstRoles[r];
         role.permissions = await this.permissionRepository.find({
           where: {
-            permissionName: In(
-              role.permissions.map((perm) => perm.permissionName),
-            ),
+            name: In(role.permissions.map((perm) => perm.name)),
           },
         });
         await this.rolesService.createRoleAndPermissions(role);
         _cli.info(
           `Role ${role.name} created and below Permissions are assigned to it`,
         );
-        _cli.info(
-          `${role.permissions.map((perm) => perm.permissionName).join(',')}`,
-        );
+        _cli.info(`${role.permissions.map((perm) => perm.name).join(',')}`);
         i++;
       }),
     );

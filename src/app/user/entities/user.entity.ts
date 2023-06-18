@@ -9,7 +9,7 @@ import Roles from '../../roles/entities/roles.entity';
 @Entity({ name: 'users' })
 export default class User extends CommonEntity {
   @Field({ description: 'user email' })
-  @Column()
+  @Column({ unique: true })
   email: string;
 
   @Exclude()
@@ -19,12 +19,6 @@ export default class User extends CommonEntity {
   @Field({ description: 'user firstName and lastName', nullable: true })
   @Column({ nullable: true })
   name?: string;
-
-  /**
-   * @desc this use for auto generated passwords if its ture user should change password
-   * */
-  @Column({ default: false })
-  needChangePassword?: boolean;
 
   @Field(() => [Roles], {
     description: 'user roles',

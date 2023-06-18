@@ -1,7 +1,7 @@
 export type PayloadRole = {
   id: number;
   roleName: string;
-  permissions: { id: number; permissionName: string }[];
+  permissions: { id: number; name: string }[];
 }[];
 export type JwtPayload = {
   id: number;
