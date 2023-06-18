@@ -1,4 +1,6 @@
 {
   "WENT_WRONG": "Something went wrong. Please try again.",
-  "FORCE_LOGGED_OUT": "You have been logged out. please login again"
+  "FORCE_LOGGED_OUT": "You have been logged out. please login again",
+  "INVALID_EMAIL_PASSWORD": "Please provide a valid email or password",
+  "LIMITED_ACCESS": "You dont have enough access. please ask admin to give you a proper access"
 }

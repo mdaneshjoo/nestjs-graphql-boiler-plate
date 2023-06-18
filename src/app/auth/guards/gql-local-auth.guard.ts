@@ -2,12 +2,12 @@ import {
   BadRequestException,
   ExecutionContext,
   Injectable,
-  UnauthorizedException,
 } from '@nestjs/common';
 import { GqlExecutionContext } from '@nestjs/graphql';
 import { validate } from 'class-validator';
 import LoginInput from '../dto/login.Input';
 import AuthService from '../auth.service';
+import UnauthorizedI18nException from '../../share/errors/custom-errors/unauthorized.i18n.exception';
 
 @Injectable()
 export default class LocalAuthGuard {
@@ -37,7 +37,9 @@ export default class LocalAuthGuard {
       loginInput.email,
       loginInput.password,
     );
-    if (!user) throw new UnauthorizedException('you cant login');
+    if (!user) {
+      throw new UnauthorizedI18nException('errors.INVALID_EMAIL_PASSWORD');
+    }
     this.getRequest(context).user = user;
     return true;
   }
