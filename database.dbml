@@ -1,0 +1,38 @@
+Project SaleSystem {
+  database_type: 'PostgreSQL'
+  Note: '''
+    # SaleSystem Database
+    **This is saleSystem database documentation**
+  '''
+}
+
+Table users {
+  id integer [primary key]
+  createdAt timestamp [not null]
+  updatedAt timestamp [not null]
+  deletedAt timestamp
+  email varchar [not null , unique]
+  password varchar [not null]
+  name varchar
+  roles integer [ref:<> roles.id]
+}
+
+Table roles {
+  id integer [primary key]
+  createdAt timestamp [not null]
+  updatedAt timestamp [not null]
+  deletedAt timestamp
+  name varchar [not null , unique]
+  description varchar
+  permissions integer [ref:<> permissions.id]
+}
+
+Table permissions {
+  id integer [primary key]
+  createdAt timestamp [not null]
+  updatedAt timestamp [not null]
+  deletedAt timestamp
+  name varchar [ unique]
+  description varchar
+  roles integer
+}

@@ -24,8 +24,9 @@ export default class AllExceptionFilter implements ExceptionFilter {
     const i18n = I18nContext.current<I18nTranslations>(gqlHost);
     if (this.appConfigService.NODE_ENV === 'PROD') {
       if (!Reflect.has(exception, 'getStatus')) {
+        const message = 'errors.WENT_WRONG';
         // eslint-disable-next-line no-param-reassign
-        exception.message = i18n.t('errors.WENT_WRONG');
+        exception.message = i18n.t(message as I18nPath);
       }
       return exception;
     }

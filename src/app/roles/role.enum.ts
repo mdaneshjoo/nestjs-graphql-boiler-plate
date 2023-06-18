@@ -5,7 +5,7 @@ import Roles from './entities/roles.entity';
 
 interface RoleMap {
   [roleName: string]: Pick<Roles, 'name' | 'description'> & {
-    permissions: Array<Pick<Roles['permissions'][0], 'permissionName'>>;
+    permissions: Array<Pick<Roles['permissions'][0], 'name'>>;
   };
 }
 
@@ -14,12 +14,12 @@ export const ConstRoles: RoleMap = {
   SuperAdmin: {
     name: 'super admin',
     description: 'this is super admin role and can access to any thing',
-    permissions: [{ permissionName: PermissionsEnum.MANAGE }],
+    permissions: [{ name: PermissionsEnum.MANAGE }],
   },
   CompanyAdmin: {
     name: 'company admin',
     description:
       'this is company admin role and can do any thing related to company',
-    permissions: [{ permissionName: PermissionsEnum.CREATE_USER }],
+    permissions: [{ name: PermissionsEnum.CREATE_USER }],
   },
 };

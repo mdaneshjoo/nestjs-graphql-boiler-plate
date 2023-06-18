@@ -2,7 +2,7 @@ import { BadRequestException } from '@nestjs/common';
 import { I18nPath } from '../../../../generated/i18n.generated';
 
 export default class BadRequestI18nException extends BadRequestException {
-  constructor(key: I18nPath, private readonly _args?: unknown) {
+  constructor(key: I18nPath | string, private readonly _args?: unknown) {
     super(key);
   }
 

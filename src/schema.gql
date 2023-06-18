@@ -111,7 +111,7 @@ type PermissionsType {
   id: ID!
 
   """user email"""
-  permissionName: String!
+  name: String!
 
   """permission roles"""
   roles: [Roles!]

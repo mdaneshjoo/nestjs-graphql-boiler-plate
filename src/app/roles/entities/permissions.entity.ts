@@ -8,7 +8,7 @@ import Roles from './roles.entity';
 export default class UserPermissions extends CommonEntity {
   @Field({ description: 'user email' })
   @Column({ unique: true })
-  permissionName?: string;
+  name?: string;
 
   @Field({ description: 'user email' })
   @Column({ nullable: true })

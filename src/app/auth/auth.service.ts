@@ -30,9 +30,9 @@ export default class AuthService {
 
   async login(user: User): Promise<{ access_token: string }> {
     const role = user.roles.map((roles) => {
-      const permissions = roles.permissions.map(({ permissionName, id }) => ({
+      const permissions = roles.permissions.map(({ name, id }) => ({
         id,
-        permissionName,
+        name,
       }));
       return { id: roles.id, roleName: roles.name, permissions };
     }) as PayloadRole;
@@ -55,7 +55,7 @@ export default class AuthService {
     if (user && user.role.length) {
       user.role.forEach((role) => {
         if (role.permissions && role.permissions.length) {
-          role.permissions.map((perm) => permissions.add(perm.permissionName));
+          role.permissions.map((perm) => permissions.add(perm.name));
         }
       });
     }

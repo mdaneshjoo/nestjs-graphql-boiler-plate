@@ -47,7 +47,7 @@ export default class RolesService {
   ): Promise<FindOrCreateResult<UserPermissions>> {
     return this.permissionRepository.findOrCreate(
       {
-        permissionName: permission.permissionName,
+        name: permission.name,
       },
       permission,
     );
@@ -61,7 +61,7 @@ export default class RolesService {
     const permissions = await Promise.all(
       roleData.permissions.map(async (perm) => {
         const { result } = await this.createPermissions({
-          permissionName: perm.permissionName,
+          name: perm.name,
           description: getPermissionsDescription(perm.description),
         });
         return result;
