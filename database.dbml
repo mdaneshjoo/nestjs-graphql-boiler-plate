@@ -1,8 +1,8 @@
-Project SaleSystem {
+Project Boilerplate {
   database_type: 'PostgreSQL'
   Note: '''
-    # SaleSystem Database
-    **This is saleSystem database documentation**
+    # Boilerplate Database
+    **This is boilerplate database documentation**
   '''
 }
 
