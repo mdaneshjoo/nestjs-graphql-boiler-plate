@@ -4,5 +4,6 @@
   "INVALID_EMAIL_PASSWORD": "Please provide a valid email or password",
   "LIMITED_ACCESS": "You dont have enough access. please ask admin to give you a proper access",
   "NOT_FOUND": "{item} Not Found!",
-  "UNABLE_DELETE": "Unable to delete {deleteItem}!"
+  "UNABLE_DELETE": "Unable to delete {deleteItem}!",
+  "EXIST": "{existedItem} already exist."
 }
