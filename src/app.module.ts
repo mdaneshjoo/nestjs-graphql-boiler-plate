@@ -12,6 +12,8 @@ import {
   ThrottlerConfigService,
 } from '@config';
 import { CacheModule } from '@nestjs/cache-manager';
+import { AcceptLanguageResolver, I18nModule } from 'nestjs-i18n';
+import * as path from 'path';
 import ShareModule from './app/share/share.module';
 import UserModule from './app/user/user.module';
 import AuthModule from './app/auth/auth.module';
@@ -39,6 +41,18 @@ import RedisConfigService from './config/database/redis/redis.config.service';
       imports: [ConfigModule],
       isGlobal: true,
       useClass: RedisConfigService,
+    }),
+    I18nModule.forRoot({
+      fallbackLanguage: 'en',
+      loaderOptions: {
+        path: path.join(__dirname, '/i18n/'),
+        watch: true,
+      },
+      resolvers: [AcceptLanguageResolver],
+      typesOutputPath: path.join(
+        __dirname,
+        '../src/generated/i18n.generated.ts',
+      ),
     }),
     // endregion
 
