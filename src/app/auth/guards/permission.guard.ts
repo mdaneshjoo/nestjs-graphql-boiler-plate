@@ -5,6 +5,7 @@ import { PermissionsEnum } from '../../roles/permissions.enum';
 import AuthService from '../auth.service';
 import { PERMISSION_KEY } from '../../share/decorators/permission-api.decorator';
 import { JwtPayload } from '../interfaces/auth.types';
+import ForbiddenI18nException from '../../share/errors/custom-errors/forbidden.i18n.exception';
 
 @Injectable()
 export default class PermissionsGuard implements CanActivate {
@@ -25,8 +26,10 @@ export default class PermissionsGuard implements CanActivate {
     const user = this.getRequest(context).user as JwtPayload;
     const permissions = this.authService.getUserPermissions(user);
     if (permissions.includes(PermissionsEnum.MANAGE)) return true;
-    return requiredPermissions.some((permission) =>
+    const haveAccess = requiredPermissions.some((permission) =>
       permissions?.includes(permission),
     );
+    if (!haveAccess) throw new ForbiddenI18nException('errors.LIMITED_ACCESS');
+    return true;
   }
 }

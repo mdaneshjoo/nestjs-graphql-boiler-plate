@@ -1,9 +1,4 @@
-import {
-  BadRequestException,
-  Inject,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { In } from 'typeorm';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
@@ -15,6 +10,8 @@ import { FindOrCreateResult } from '../share/interface';
 import { getPermissionsDescription } from './permissions.enum';
 import { RoleFilterParam, UpdateRoleParam } from './interfaces/role.interface';
 import { PermissionFilterParams } from './interfaces/permissions.interface';
+import NotFoundI18nException from '../share/errors/custom-errors/not-found.i18n.exception';
+import BadRequestI18nException from '../share/errors/custom-errors/bad-request.i18n.exception';
 
 @Injectable()
 export default class RolesService {
@@ -102,11 +99,17 @@ export default class RolesService {
       relations: { permissions: true, users: true },
     });
 
-    if (!role) throw new NotFoundException('role not exist');
+    if (!role) {
+      throw new NotFoundI18nException('errors.NOT_FOUND', { item: 'roles' });
+    }
     const foundPermissions = await this.permissionRepository.find({
       where: { id: In(updateRole.permissions.map((_perm) => _perm.id)) },
     });
-    if (!foundPermissions.length) throw new Error("permission doesn't exist");
+    if (!foundPermissions.length) {
+      throw new NotFoundI18nException('errors.NOT_FOUND', {
+        item: 'permission',
+      });
+    }
     role.permissions = foundPermissions;
     const savedRoles = await this.roleRepository.save(role);
     const roleUsersIds = role.users.map((user) => user.id.toString());
@@ -120,7 +123,11 @@ export default class RolesService {
       .softDelete()
       .where('id=:id', { id: roleId })
       .execute();
-    if (!affected) throw new BadRequestException('Unable to delete this role');
+    if (!affected) {
+      throw new BadRequestI18nException('errors.UNABLE_DELETE', {
+        deleteItem: 'role',
+      });
+    }
     return roleId;
   }
 }

@@ -12,12 +12,16 @@ import {
   ThrottlerConfigService,
 } from '@config';
 import { CacheModule } from '@nestjs/cache-manager';
+import { AcceptLanguageResolver, I18nModule } from 'nestjs-i18n';
+import * as path from 'path';
+import { APP_FILTER } from '@nestjs/core';
 import ShareModule from './app/share/share.module';
 import UserModule from './app/user/user.module';
 import AuthModule from './app/auth/auth.module';
 import RolesModule from './app/roles/roles.module';
 import PrivilegesModule from './app/commands/privileges.module';
 import RedisConfigService from './config/database/redis/redis.config.service';
+import AllExceptionFilter from './app/share/errors/all-exception.filter';
 
 @Module({
   imports: [
@@ -40,6 +44,21 @@ import RedisConfigService from './config/database/redis/redis.config.service';
       isGlobal: true,
       useClass: RedisConfigService,
     }),
+    I18nModule.forRoot({
+      fallbackLanguage: 'en',
+      fallbacks: {
+        tr: 'tr',
+      },
+      loaderOptions: {
+        path: path.join(__dirname, '/i18n/'),
+        watch: true,
+      },
+      resolvers: [AcceptLanguageResolver],
+      typesOutputPath: path.join(
+        __dirname,
+        '../src/generated/i18n.generated.ts',
+      ),
+    }),
     // endregion
 
     ...CustomConfigModule,
@@ -50,6 +69,7 @@ import RedisConfigService from './config/database/redis/redis.config.service';
     RolesModule,
     PrivilegesModule,
   ],
+  providers: [{ provide: APP_FILTER, useClass: AllExceptionFilter }],
 })
 // we can export default because of PrivilegesModule (cli file read this class)
 // eslint-disable-next-line import/prefer-default-export
